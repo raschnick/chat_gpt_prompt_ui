@@ -34,4 +34,11 @@ def get_sentiment_gpt(answer, role):
 def get_sentiment_vader(answer):
     scores = analyzer.polarity_scores(answer)
 
-    return scores
+    if scores['compound'] >= 0.05:
+        sentiment = "Sentiment: Positive"
+    elif scores['compound'] <= -0.05:
+        sentiment = "Sentiment: Negative"
+    else:
+        sentiment = "Sentiment: Neutral"
+
+    return sentiment
