@@ -1,7 +1,6 @@
 import streamlit as st
 import nltk
 
-
 from request_service import get_sentiment_vader, get_sentiment_gpt, generate_response
 
 nltk.download('vader_lexicon')
