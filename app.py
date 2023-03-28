@@ -2,7 +2,8 @@ import streamlit as st
 
 from request_service import get_sentiment_vader, get_sentiment_gpt, generate_response
 
-role_help = 'User: This role is used to indicate that the text is spoken by the primary speaker in the conversation, ' \
+role_help = 'Specify the role that Chat GPT should have:' \
+            '\n\nUser: This role is used to indicate that the text is spoken by the primary speaker in the conversation, ' \
             'typically a human user. When you send text with the user role, the OpenAI API will generate a ' \
             'response as if it were speaking to a human, taking into account the language, tone, and style ' \
             'appropriate for a human-to-human conversation. ' \
@@ -15,27 +16,29 @@ role_help = 'User: This role is used to indicate that the text is spoken by the 
             ' a response that is appropriate for a machine-to-machine conversation. This might include more technical' \
             ' language, or a response that is optimized for a particular use case or system integration.'
 
+max_length_help = 'Specify the maximum number of tokens that Chat GPT should generate in response to your prompt. ' \
+                  'A token is a single word or piece of punctuation in the generated text.'
 
-def main():
+if __name__ == "__main__":
     st.set_page_config(page_title='Chat GPT UI')
     st.header('A simple Chat GPT (3.5) UI (with sentiment analysis)')
 
-    role = st.selectbox('Enter the role ChatGPT should have:', ('User', 'System', 'Assistant'), help=role_help)
-    question = st.text_input('Enter your question:')
+    response_length = int(
+        st.slider("Max Response Length:", min_value=100, max_value=2000, value=500, help=max_length_help))
+
+    role = st.selectbox('Role', ('User', 'System', 'Assistant'), help=role_help)
+
+    question = st.text_input('Question:')
 
     if question and role:
         st.subheader('Answer:')
-        answer = generate_response(question, role.lower())
+        answer = generate_response(question, role.lower(), response_length)
         st.write(answer)
 
         st.subheader('Answer Sentiment Analysis (by ChatGPT):')
-        answer_sentiment_gpt = get_sentiment_gpt(answer, role.lower())
+        answer_sentiment_gpt = get_sentiment_gpt(answer, role.lower(), response_length)
         st.write(answer_sentiment_gpt)
 
         st.subheader('Answer Sentiment Analysis (by VADER):')
         answer_sentiment_vader = get_sentiment_vader(answer)
         st.write(answer_sentiment_vader)
-
-
-if __name__ == "__main__":
-    main()
