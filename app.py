@@ -3,7 +3,7 @@ import nltk
 
 from request_service import get_sentiment_vader, get_sentiment_gpt, generate_response
 
-nltk.download('vader_lexicon')
+nltk.download('vader_lexicon', download_dir='.')
 
 role_help = 'User: This role is used to indicate that the text is spoken by the primary speaker in the conversation, ' \
             'typically a human user. When you send text with the user role, the OpenAI API will generate a ' \
