@@ -1,6 +1,6 @@
 import streamlit as st
 
-from request_service import generate_response, get_sentiment
+from request_service import get_sentiment_vader, get_sentiment_gpt, generate_response
 
 role_help = 'User: This role is used to indicate that the text is spoken by the primary speaker in the conversation, ' \
             'typically a human user. When you send text with the user role, the OpenAI API will generate a ' \
@@ -29,8 +29,12 @@ def main():
         st.write(answer)
 
         st.subheader('Answer Sentiment Analysis (by ChatGPT):')
-        answer_sentiment = get_sentiment(answer, role.lower())
-        st.write(answer_sentiment)
+        answer_sentiment_gpt = get_sentiment_gpt(answer, role.lower())
+        st.write(answer_sentiment_gpt)
+
+        st.subheader('Answer Sentiment Analysis (by VADER):')
+        answer_sentiment_vader = get_sentiment_vader(answer)
+        st.write(answer_sentiment_vader)
 
 
 if __name__ == "__main__":

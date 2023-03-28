@@ -2,12 +2,15 @@ import requests
 import json
 import os
 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
 url = 'https://api.openai.com/v1/chat/completions'
 headers = {
     'Content-Type': 'application/json',
     'Authorization': f'Bearer {os.environ["OPENAI_API_KEY"]}',
 }
 
+analyzer = SentimentIntensityAnalyzer()
 
 def generate_response(message, role):
     data = {
@@ -23,6 +26,12 @@ def generate_response(message, role):
     return response_json['choices'][0]['message']['content'].strip()
 
 
-def get_sentiment(answer, role):
+def get_sentiment_gpt(answer, role):
     sentiment_question = 'Do a sentiment analysis for the following text:' + answer
     return generate_response(sentiment_question, role)
+
+
+def get_sentiment_vader(answer):
+    scores = analyzer.polarity_scores(answer)
+
+    return scores
