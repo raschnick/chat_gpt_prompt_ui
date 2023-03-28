@@ -9,12 +9,12 @@ headers = {
 }
 
 
-def generate_response(message):
+def generate_response(message, role):
     data = {
-        'messages': [{'role': 'user', 'content': f'{message}'}],
+        'messages': [{'role': f'{role}', 'content': f'{message}'}],
         'model': 'gpt-3.5-turbo',
         'temperature': 0.5,
-        'max_tokens': 100,
+        'max_tokens': 500,
         'n': 1,
         'stop': None,
     }
@@ -23,3 +23,6 @@ def generate_response(message):
     return response_json['choices'][0]['message']['content'].strip()
 
 
+def get_sentiment(answer, role):
+    sentiment_question = 'Do a sentiment analysis for the following text:' + answer
+    return generate_response(sentiment_question, role)
